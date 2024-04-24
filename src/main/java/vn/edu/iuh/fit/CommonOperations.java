@@ -6,38 +6,60 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.ConstructorDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.comments.Comment;
 import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.google.common.base.Strings;
 
 public class CommonOperations {
 	public static void listMethodCalls(File projectDir) {
-		List<String> invalidPackages = new ArrayList();
 
 		new DirExplorer((level, path, file) -> path.endsWith(".java"), (level, path, file) -> {
 			System.out.println(path);
 			System.out.println(Strings.repeat("=", path.length()));
 			try {
 				new VoidVisitorAdapter<Object>() {
+
 					// Câu 1
-					@Override
-					public void visit(PackageDeclaration n, Object arg) {
-						super.visit(n, arg);
-						String packageName = n.getName().toString();
-						System.out.println("\npackageName: " + packageName);
+//					@Override
+//					public void visit(PackageDeclaration n, Object arg) {
+//						super.visit(n, arg);
+//						String packageName = n.getName().toString();
+//						System.out.println("\npackageName: " + packageName);
+//
+//						if (!packageName.startsWith("com.companyname")) {
+//							System.out.println("\n********* Invalid package: " + packageName + "\n");
+//						}else {
+//							System.out.println("\n********* Valid package: " + packageName + "\n");
+//
+//						}
+//					}
 
-						// Kiểm tra nếu package không tuân theo mẫu "com.companyname.*"
-						if (!packageName.startsWith("com.companyname")) {
-							System.out.println("\n********* Invalid package: " + packageName);
-						}else {
-							System.out.println("\n********* Valid package: " + packageName);
-
-						}
-					}
+//					// Câu 2
+//					@Override
+//					public void visit(ClassOrInterfaceDeclaration n, Object arg) {
+//						super.visit(n, arg);
+//						String className = n.getNameAsString();
+//						System.out.println("\nclassName: " + className);
+//
+//						String NOUN_PATTERN = "^[A-Z][a-zA-Z0-9]*(?:[A-Z][a-z0-9]*)*$";
+//
+//						if (Character.isUpperCase(className.charAt(0)) || Pattern.matches(NOUN_PATTERN, className)) {
+//							System.out.println("\n********* Valid class names " + className + "\n");
+//						} else {
+//							System.out.println("\n********* Invalid class names " + className + "\n");
+//
+//						}
+//					}
 
 					// Câu 3
 
@@ -74,6 +96,103 @@ public class CommonOperations {
 //
 //						return hasCreatedDate && hasAuthor;
 //					}
+
+					// Câu 4
+//					@Override
+//					public void visit(FieldDeclaration n, Object arg) {
+//						super.visit(n, arg);
+//						NodeList<VariableDeclarator> vars = n.getVariables();
+//
+//						vars.forEach(var -> {
+//
+//							char c = var.getNameAsString().charAt(0);
+//							if ((c >= 'a' && c <= 'z')) {
+//								System.out.println("\n********* Valid field " + var.getNameAsString() + "\n");
+//							} else {
+//								System.out.println("\n********* Invalid field " + var.getNameAsString() + "\n");
+//
+//							}
+//						});
+//
+//					}
+
+//					// Câu 6
+//					@Override
+//					public void visit(MethodDeclaration n, Object arg) {
+//						super.visit(n, arg);
+//						String methodName = n.getNameAsString();
+//						System.out.println("\nMethodName: " + methodName);
+//
+//						if (!Character.isUpperCase(methodName.charAt(0))) {
+//							System.out.println("\n********* Valid method name " + methodName + "\n");
+//						} else {
+//							System.out.println("\n********* Invalid method name " + methodName + "\n");
+//
+//						}
+//					}
+
+					// Câu 7
+					@Override
+					public void visit(MethodDeclaration n, Object arg) {
+						super.visit(n, arg);
+						String methodName = n.getNameAsString();
+
+						// Phương thức default constructor, accessors/mutators,
+						// hashCode, equals, toString
+						if (isCommonMethod(methodName)) {
+							System.out.println("\n********* Method default " + methodName);
+						}
+
+						// Kiểm tra nếu không có comment hoặc comment là rỗng
+						if (!hasValidComment(n)) {
+							System.out.println("\n********* Method invalid comment " + methodName);
+						} else {
+							System.out.println("\n********* Method valid comment " + methodName);
+
+						}
+
+					}
+
+					@Override
+					public void visit(ConstructorDeclaration n, Object arg) {
+						super.visit(n, arg);
+
+						// Lấy danh sách các tham số
+						List<Parameter> parameters = n.getParameters();
+
+						// Hiển thị tên của constructor
+						System.out.println("\nConstructor: " + n.getDeclarationAsString());
+
+						if (parameters.isEmpty()) {
+							System.out.println("This is a default constructor (no parameters).");
+						} else {
+							// Kiểm tra nếu không có comment hoặc comment là rỗng
+							if (!hasValidComment(n)) {
+								System.out.println(
+										"Constructor invalid comment " + n.getDeclarationAsString());
+							} else {
+								System.out
+										.println("Constructor valid comment " + n.getDeclarationAsString());
+
+							}
+						}
+
+					}
+
+					private boolean hasValidComment(ConstructorDeclaration n) {
+						Comment comment = n.getComment().orElse(null);
+						return comment != null && !comment.getContent().trim().isEmpty();
+					}
+
+					private boolean isCommonMethod(String methodName) {
+						return methodName.equals("hashCode") || methodName.equals("equals")
+								|| methodName.equals("toString");
+					}
+
+					private boolean hasValidComment(MethodDeclaration md) {
+						Comment comment = md.getComment().orElse(null);
+						return comment != null && !comment.getContent().trim().isEmpty();
+					}
 
 				}.visit(StaticJavaParser.parse(file), null);
 
