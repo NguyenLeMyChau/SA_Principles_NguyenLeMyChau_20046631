@@ -1,6 +1,8 @@
 package vn.edu.iuh.fit;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import com.github.javaparser.StaticJavaParser;
@@ -14,51 +16,72 @@ import com.google.common.base.Strings;
 
 public class CommonOperations {
 	public static void listMethodCalls(File projectDir) {
+		List<String> invalidPackages = new ArrayList();
+
 		new DirExplorer((level, path, file) -> path.endsWith(".java"), (level, path, file) -> {
 			System.out.println(path);
 			System.out.println(Strings.repeat("=", path.length()));
 			try {
 				new VoidVisitorAdapter<Object>() {
-
+					// Câu 1
 					@Override
-					public void visit(JavadocComment n, Object arg) {
+					public void visit(PackageDeclaration n, Object arg) {
 						super.visit(n, arg);
-						checkValidComments(n);
-					}
+						String packageName = n.getName().toString();
+						System.out.println("\npackageName: " + packageName);
 
-					private void checkValidComments(JavadocComment n) {
-						String content = n.getContent();
-						if (content == null || content.isEmpty() || content == "") {
-							System.out.println("\t********* Not valid comment");
-						} else {
-							System.out.println("[" + n.getBegin() + n.getContent() + "]" + n.getEnd());
+						// Kiểm tra nếu package không tuân theo mẫu "com.companyname.*"
+						if (!packageName.startsWith("com.companyname")) {
+							System.out.println("\n********* Invalid package: " + packageName);
+						}else {
+							System.out.println("\n********* Valid package: " + packageName);
 
-							if (!isValidClassComment(content)) {
-								System.out.println("\n********* Invalid Javadoc comment\n");
-							} else {
-								System.out.println("\n********* Valid Javadoc comment\n");
-							}
 						}
 					}
 
-					private boolean isValidClassComment(String content) {
-						if (content == null || content.isEmpty()) {
-							return false;
-						}
+					// Câu 3
 
-						// Kiểm tra xem có "created-date" và "author" trong bình luận
-						boolean hasCreatedDate = Pattern.compile("created-date", Pattern.CASE_INSENSITIVE)
-								.matcher(content).find();
-						boolean hasAuthor = Pattern.compile("author", Pattern.CASE_INSENSITIVE).matcher(content).find();
-
-						return hasCreatedDate && hasAuthor;
-					}
+//					@Override
+//					public void visit(JavadocComment n, Object arg) {
+//						super.visit(n, arg);
+//						checkValidComments(n);
+//					}
+//
+//					private void checkValidComments(JavadocComment n) {
+//						String content = n.getContent();
+//						if (content == null || content.isEmpty() || content == "") {
+//							System.out.println("\t********* Not valid comment");
+//						} else {
+//							System.out.println("[" + n.getBegin() + n.getContent() + "]" + n.getEnd());
+//
+//							if (!isValidClassComment(content)) {
+//								System.out.println("\n********* Invalid Javadoc comment\n");
+//							} else {
+//								System.out.println("\n********* Valid Javadoc comment\n");
+//							}
+//						}
+//					}
+//
+//					private boolean isValidClassComment(String content) {
+//						if (content == null || content.isEmpty()) {
+//							return false;
+//						}
+//
+//						// Kiểm tra xem có "created-date" và "author" trong bình luận
+//						boolean hasCreatedDate = Pattern.compile("created-date", Pattern.CASE_INSENSITIVE)
+//								.matcher(content).find();
+//						boolean hasAuthor = Pattern.compile("author", Pattern.CASE_INSENSITIVE).matcher(content).find();
+//
+//						return hasCreatedDate && hasAuthor;
+//					}
 
 				}.visit(StaticJavaParser.parse(file), null);
+
 			} catch (Exception e) {
 				new RuntimeException(e);
 			}
 		}).explore(projectDir);
+
 	}
 
 	public static void main(String[] args) {
