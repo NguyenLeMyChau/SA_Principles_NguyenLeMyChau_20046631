@@ -18,7 +18,14 @@ Việc tổ chức viết code phải tuân theo quy định chặt chẽ về t
 
 ##### Câu 2. Các class phải có tên là một danh từ hoặc cụm danh ngữ và phải bắt đầu bằng chữ hoa.
 
-![altText](images/Cau2.png "Cau2") )
+Hình 1. Check điều kiện bắt đầu bằng chữ hoa 
+
+![altText](images/Cau2.png "Cau2")
+
+Hình 2. Check điều kiện danh từ
+Sử dụng file nounlist.txt (gồm 6108 danh từ) --> Đem từ đầu tiên trước chữ cái viết hoa thứ 2 làm partName để so sánh trong nounlist --> Tồn tại thì trả về vị trí từ đó trong nounlist, ngược lại trả về -1
+
+![altText](images/Cau2_2.png "Cau2_2")
 
 ##### Câu 3. Mỗi lớp phải có một comment mô tả cho lớp. Trong comment đó phải có ngày tạo
 (created-date) và author.
