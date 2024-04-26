@@ -85,47 +85,47 @@ public class CommonOperations {
 //					}
 
 					// Câu 2
-					@Override
-					public void visit(ClassOrInterfaceDeclaration n, Object arg) {
-						super.visit(n, arg);
-
-						List<String> nounList = new ArrayList<>();
-
-						try {
-							String nounlistPath = "nounlist.txt";
-
-							nounList = readNounList(nounlistPath);
-
-							String className = n.getNameAsString();
-							System.out.println("\nclassName: " + className);
-
-							String NOUN_PATTERN = "^[A-Z][a-zA-Z0-9]*(?:[A-Z][a-z0-9]*)*$";
-
-							if (Character.isUpperCase(className.charAt(0))
-									|| Pattern.matches(NOUN_PATTERN, className)) {
-								System.out.println("\n********* Valid class name " + className + "\n");
-							} else {
-								System.out.println("\n********* Invalid class name " + className + "\n");
-							}
-
-							String partName = getFirstPart(className);
-							System.out.println("\n********* Phần đầu đem ra so sánh trong nounlist: " + partName);
-
-							// Kiểm tra nếu tên lớp nằm trong danh sách từ nounlist
-							if (!nounList.contains(partName)) {
-								int index = nounList.indexOf(partName);
-								System.out.println("\n********* Invalid class name (in nounlist): " + index);
-							} else {
-								int index = nounList.indexOf(partName) + 1;
-								System.out.println("\n********* Valid class name (in nounlist): " + index);
-							}
-
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-					}
+//					@Override
+//					public void visit(ClassOrInterfaceDeclaration n, Object arg) {
+//						super.visit(n, arg);
+//
+//						List<String> nounList = new ArrayList<>();
+//
+//						try {
+//							String nounlistPath = "nounlist.txt";
+//
+//							nounList = readNounList(nounlistPath);
+//
+//							String className = n.getNameAsString();
+//							System.out.println("\nclassName: " + className);
+//
+//							String NOUN_PATTERN = "^[A-Z][a-zA-Z0-9]*(?:[A-Z][a-z0-9]*)*$";
+//
+//							if (Character.isUpperCase(className.charAt(0))
+//									|| Pattern.matches(NOUN_PATTERN, className)) {
+//								System.out.println("\n********* Valid class name " + className + "\n");
+//							} else {
+//								System.out.println("\n********* Invalid class name " + className + "\n");
+//							}
+//
+//							String partName = getFirstPart(className);
+//							System.out.println("\n********* Phần đầu đem ra so sánh trong nounlist: " + partName);
+//
+//							// Kiểm tra nếu tên lớp nằm trong danh sách từ nounlist
+//							if (!nounList.contains(partName)) {
+//								int index = nounList.indexOf(partName);
+//								System.out.println("\n********* Invalid class name (in nounlist): " + index);
+//							} else {
+//								int index = nounList.indexOf(partName) + 1;
+//								System.out.println("\n********* Valid class name (in nounlist): " + index);
+//							}
+//
+//						} catch (IOException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+//
+//					}
 
 					// Câu 3
 
@@ -167,35 +167,76 @@ public class CommonOperations {
 //					@Override
 //					public void visit(FieldDeclaration n, Object arg) {
 //						super.visit(n, arg);
-//						NodeList<VariableDeclarator> vars = n.getVariables();
 //
-//						vars.forEach(var -> {
+//						try {
+//							String nounlistPath = "nounlist.txt";
 //
-//							char c = var.getNameAsString().charAt(0);
-//							if ((c >= 'a' && c <= 'z')) {
-//								System.out.println("\n********* Valid field " + var.getNameAsString() + "\n");
-//							} else {
-//								System.out.println("\n********* Invalid field " + var.getNameAsString() + "\n");
+//							List<String> nounList = readNounList(nounlistPath);
 //
-//							}
-//						});
+//							NodeList<VariableDeclarator> vars = n.getVariables();
+//
+//							vars.forEach(var -> {
+//
+//								char c = var.getNameAsString().charAt(0);
+//								if ((c >= 'a' && c <= 'z')) {
+//									System.out.println("\n********* Valid field " + var.getNameAsString());
+//								} else {
+//									System.out.println("\n********* Invalid field " + var.getNameAsString());
+//								}
+//
+//								if (!nounList.contains(var.getNameAsString())) {
+//									int index = nounList.indexOf(var.getNameAsString());
+//									System.out.println("\n********* Invalid fied name " + var.getNameAsString()
+//											+ " (in nounlist): " + index);
+//								} else {
+//									int index = nounList.indexOf(var.getNameAsString()) + 1;
+//									System.out.println("\n********* Valid fied name " + var.getNameAsString()
+//											+ " (in nounlist): " + index);
+//								}
+//
+//							});
+//						} catch (IOException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
 //
 //					}
 
-//					// Câu 6
-//					@Override
-//					public void visit(MethodDeclaration n, Object arg) {
-//						super.visit(n, arg);
-//						String methodName = n.getNameAsString();
-//						System.out.println("\nMethodName: " + methodName);
-//
-//						if (!Character.isUpperCase(methodName.charAt(0))) {
-//							System.out.println("\n********* Valid method name " + methodName + "\n");
-//						} else {
-//							System.out.println("\n********* Invalid method name " + methodName + "\n");
-//
-//						}
-//					}
+					// Câu 6
+					@Override
+					public void visit(MethodDeclaration n, Object arg) {
+						super.visit(n, arg);
+						String verblistPath = "verbs.txt";
+
+						try {
+							List<String> verbs = readNounList(verblistPath);
+
+							String methodName = n.getNameAsString();
+							System.out.println("\nMethodName: " + methodName);
+
+							if (!Character.isUpperCase(methodName.charAt(0))) {
+								System.out.println("\n********* Valid method name " + methodName + "\n");
+							} else {
+								System.out.println("\n********* Invalid method name " + methodName + "\n");
+							}
+
+							String partName = getFirstPart(methodName);
+							System.out.println("\n********* Phần đầu đem ra so sánh trong nounlist: " + partName);
+
+							// Kiểm tra nếu tên lớp nằm trong danh sách từ nounlist
+							if (!verbs.contains(partName)) {
+								int index = verbs.indexOf(partName);
+								System.out.println("\n********* Invalid class name (in nounlist): " + index);
+							} else {
+								int index = verbs.indexOf(partName) + 1;
+								System.out.println("\n********* Valid class name (in nounlist): " + index);
+							}
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
 
 					// Câu 7
 //					@Override

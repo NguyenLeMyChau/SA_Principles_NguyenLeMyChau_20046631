@@ -5,6 +5,9 @@ Việc tổ chức viết code phải tuân theo quy định chặt chẽ về t
 
 #### Sử dụng
 - JDK: Phiên bản 17.0.10
+- Nguồn lấy nounlist: <https://www.desiquintans.com/nounlist>
+- Nguồn lấy verbs: <https://github.com/aaronbassett/Pass-phrase/blob/master/verbs.txt>
+
 
 #### Công cụ
 ![altText](images/tool.png "Tool"))
@@ -38,15 +41,24 @@ Trong comment **không có** created-date và author -> In ra Invalid Javadoc co
 
 ##### Câu 4. Các fields trong các class phải là danh từ hoặc cụm danh ngữ và phải bắt đầu bằng một chữ thường.
 
-![altText](images/Cau4.png "Cau4") )
+Hình 1. Check điều kiện chữ thường
+![altText](images/Cau4.png "Cau4")
+
+Hình 2. Sử dụng file nounlist.txt (gồm 6108 danh từ) --> Đem field so sánh trong nounlist --> Tồn tại thì trả về vị trí từ đó trong nounlist, ngược lại trả về -1
+![altText](images/Cau4_2.png "Cau4_2")
 
 
 ##### Câu 5. Tất cả các hằng số phải là chữ viết hoa và phải nằm trong một interface.
 
 ##### Câu 6. Tên method phải bắt đầu bằng một động từ và phải là chữ thường
 
+Hình 1. Check điều kiện là chữ thường
 ![altText](images/Cau6.png "Cau6"))
 
+Hình 2. Check điều kiện động từ
+Sử dụng file verbs.txt (gồm 1043 động từ) --> Đem từ đầu tiên trước chữ cái viết hoa thứ 2 làm partName để so sánh trong verbs --> Tồn tại thì trả về vị trí từ đó trong verbs, ngược lại trả về -1
+
+![altText](images/Cau6_2.png "Cau6_2")
 
 ##### Câu 7. Mỗi method phải có một ghi chú mô tả cho công việc của method trừ phương thức default constructor, hashCode, equals, toString.
 
