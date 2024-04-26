@@ -221,15 +221,15 @@ public class CommonOperations {
 							}
 
 							String partName = getFirstPart(methodName);
-							System.out.println("\n********* Phần đầu đem ra so sánh trong nounlist: " + partName);
+							System.out.println("\n********* Phần đầu đem ra so sánh trong verbs: " + partName);
 
 							// Kiểm tra nếu tên lớp nằm trong danh sách từ nounlist
 							if (!verbs.contains(partName)) {
 								int index = verbs.indexOf(partName);
-								System.out.println("\n********* Invalid class name (in nounlist): " + index);
+								System.out.println("\n********* Invalid class name (in verbs): " + index);
 							} else {
 								int index = verbs.indexOf(partName) + 1;
-								System.out.println("\n********* Valid class name (in nounlist): " + index);
+								System.out.println("\n********* Valid class name (in verbs): " + index);
 							}
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
