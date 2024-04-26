@@ -58,7 +58,7 @@ Hình 1. Check điều kiện là chữ thường
 Hình 2. Check điều kiện động từ
 Sử dụng file verbs.txt (gồm 1043 động từ) --> Đem từ đầu tiên trước chữ cái viết hoa thứ 2 làm partName để so sánh trong verbs --> Tồn tại thì trả về vị trí từ đó trong verbs, ngược lại trả về -1
 
-![altText](images/Cau6_2.png "Cau6_2")
+![altText](images/Cau6_3.png "Cau6_3")
 
 ##### Câu 7. Mỗi method phải có một ghi chú mô tả cho công việc của method trừ phương thức default constructor, hashCode, equals, toString.
 
